@@ -2,10 +2,11 @@
 
 namespace App\Command;
 
-use App\Entity\Car;
-use App\Entity\House;
-use App\Entity\Owner;
-use App\Entity\Seat;
+use App\Entity\Plant;
+use App\Entity\PlantPicture;
+use App\Entity\Room;
+use App\Entity\User;
+use App\Entity\UserProfile;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -26,28 +27,42 @@ class CreateDataCommand extends Command
     parent::__construct();
   }
 
-  protected function configure()
+  protected function configure(): void
   {
     $this->setDescription('Command to create data of the reproducer');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output): int
   {
-    $owner = new Owner();
-    $house = new House();
-    $car = new Car();
+    $user = new User();
+    $profile = new UserProfile();
 
-    $owner->addHouse($house);
-    $owner->addCar($car);
+    $user->setProfile($profile);
 
-    $house->addCar($car);
+    $nb_rooms = random_int(1, 5);
 
-    $car->addSeat(new Seat());
-    $car->addSeat(new Seat());
-    $car->addSeat(new Seat());
-    $car->addSeat(new Seat());
+    for ($i = 1; $i < $nb_rooms; $i++) {
+      $room = new Room();
 
-    $this->entityManager->persist($owner);
+      $nb_plants = random_int(0, 3);
+
+      for ($j = 0; $j < $nb_plants; $j++) {
+        $plant = new Plant();
+
+        $nb_plant_pictures = random_int(0, 3);
+
+        for ($k = 0; $k < $nb_plant_pictures; $k++) {
+          $plant->addPlantPicture(new PlantPicture());
+        }
+
+        $user->addPlant($plant);
+        $room->addPlant($plant);
+      }
+
+      $user->addRoom($room);
+    }
+
+    $this->entityManager->persist($user);
     $this->entityManager->flush();
 
     $output->writeln('Data created');

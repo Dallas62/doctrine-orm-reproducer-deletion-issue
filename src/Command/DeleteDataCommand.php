@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\Owner;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,21 +23,21 @@ class DeleteDataCommand extends Command
     parent::__construct();
   }
 
-  protected function configure()
+  protected function configure(): void
   {
     $this->setDescription('Command to reproduce the deletion issue');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output): int
   {
-    $one_owner = $this->entityManager->getRepository(Owner::class)->findOneBy([]);
+    $one_user = $this->entityManager->getRepository(User::class)->findOneBy([]);
 
-    if (!$one_owner) {
+    if (!$one_user) {
       $output->writeln('Please create data first');
       return 1;
     }
 
-    $this->entityManager->remove($one_owner);
+    $this->entityManager->remove($one_user);
     $this->entityManager->flush();
 
     $output->writeln('Data deleted');

@@ -41,8 +41,10 @@ class CreateDataCommand extends Command
     $profile = new UserProfile();
     $room = new Room();
 
-    $user->addRoom($room);
-    $user->setProfile($profile);
+    $user->rooms->add($room);
+    $user->profile = $profile;
+    $room->user = $user;
+    $profile->user = $user;
 
     $this->entityManager->persist($user);
     $this->entityManager->flush();

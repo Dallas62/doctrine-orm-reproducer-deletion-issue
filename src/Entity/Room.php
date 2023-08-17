@@ -16,37 +16,14 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity]
-#[Table(name: 'user_rooms')]
 class Room
 {
   #[Id]
   #[Column(type: 'integer')]
   #[GeneratedValue]
-  private $id;
+  public $id;
 
   #[ManyToOne(targetEntity: 'App\Entity\User', inversedBy: 'rooms')]
-  #[JoinColumn(name: 'user_id', nullable: false)]
-  private ?User $user;
-
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
-
-  public function getUser(): ?User
-  {
-    return $this->user;
-  }
-
-  public function setUser(?User $user): self
-  {
-    $this->user = $user;
-
-    return $this;
-  }
-
-  public function __toString()
-  {
-    return 'room-' . $this->id;
-  }
+  #[JoinColumn(nullable: false)]
+  public ?User $user;
 }

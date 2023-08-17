@@ -25,7 +25,7 @@ class User
   private $id;
 
   #[OneToOne(targetEntity: 'App\Entity\UserProfile', cascade: ['persist', 'remove'])]
-  #[JoinColumn(name: 'profile_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+  #[JoinColumn(onDelete: 'CASCADE')]
   private $profile;
 
   #[OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Room', cascade: ['persist', 'remove'], orphanRemoval: true)]

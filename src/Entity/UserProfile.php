@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -22,7 +20,7 @@ class UserProfile
   private $id;
 
   #[OneToOne(targetEntity: 'App\Entity\User')]
-  #[JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+  #[JoinColumn(onDelete: 'CASCADE')]
   private $user;
 
 

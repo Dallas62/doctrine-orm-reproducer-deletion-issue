@@ -17,13 +17,11 @@ use Doctrine\ORM\Mapping\Table;
 
 #[Entity]
 #[Table(name: 'users')]
-#[HasLifecycleCallbacks]
 class User
 {
   #[Id]
-  #[Column(type: 'ulid', unique: true)]
-  #[GeneratedValue(strategy: 'CUSTOM')]
-  #[CustomIdGenerator(class: 'Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator')]
+  #[Column(type: 'integer')]
+  #[GeneratedValue]
   private $id;
 
   #[OneToOne(targetEntity: 'App\Entity\UserProfile', cascade: ['persist', 'remove'])]
@@ -33,13 +31,9 @@ class User
   #[OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Room', cascade: ['persist', 'remove'], orphanRemoval: true)]
   private $rooms;
 
-  #[OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Plant', cascade: ['persist', 'remove'], orphanRemoval: true)]
-  private $plants;
-
   public function __construct()
   {
     $this->rooms = new ArrayCollection();
-    $this->plants = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -88,37 +82,6 @@ class User
       // set the owning side to null (unless already changed)
       if ($house->getUser() === $this) {
         $house->setUser(null);
-      }
-    }
-
-    return $this;
-  }
-
-  /**
-   * @return Collection|Plant[]
-   */
-  public function getPlants(): Collection
-  {
-    return $this->plants;
-  }
-
-  public function addPlant(Plant $plant): self
-  {
-    if (!$this->plants->contains($plant)) {
-      $this->plants[] = $plant;
-      $plant->setUser($this);
-    }
-
-    return $this;
-  }
-
-  public function removePlant(Plant $plant): self
-  {
-    if ($this->plants->contains($plant)) {
-      $this->plants->removeElement($plant);
-      // set the owning side to null (unless already changed)
-      if ($plant->getUser() === $this) {
-        $plant->setUser(null);
       }
     }
 

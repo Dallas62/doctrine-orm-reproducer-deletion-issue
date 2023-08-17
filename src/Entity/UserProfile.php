@@ -14,13 +14,11 @@ use Doctrine\ORM\Mapping\Table;
 
 #[Entity]
 #[Table(name: 'user_profiles')]
-#[HasLifecycleCallbacks]
 class UserProfile
 {
   #[Id]
-  #[Column(type: 'ulid', unique: true)]
-  #[GeneratedValue(strategy: 'CUSTOM')]
-  #[CustomIdGenerator(class: 'Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator')]
+  #[Column(type: 'integer')]
+  #[GeneratedValue]
   private $id;
 
   #[OneToOne(targetEntity: 'App\Entity\User')]
